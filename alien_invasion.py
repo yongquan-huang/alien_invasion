@@ -10,25 +10,49 @@
 import sys
 import pygame
 
+# def run_game():
+#     # 初始化游戏并创建一个屏幕对象
+#     pygame.init()   # 初始化背景设置
+#     screen = pygame.display.set_mode((1200,800))  # 创建显示窗口，（1200，800）指定了窗口的大小
+#     pygame.display.set_caption('Alien Invasion')
+#
+#     # 设置背景色
+#     bg_color = (230,230,230)
+#
+#     # 开始游戏主循环
+#     while True:
+#         # 监听键盘和鼠标事件
+#         for event in pygame.event.get():   # 所有的键盘和鼠标事件都将促使for循环运行
+#             if event.type == pygame.QUIT:
+#                 sys.exit()
+#
+#         # 每次循环时都重新绘制屏幕
+#         screen.fill(bg_color)
+#
+#         # 让最近绘制的屏幕可见
+#         pygame.display.flip()
+
+from settings import Settings
+from ship import Ship
 
 def run_game():
-    # 初始化游戏并创建一个屏幕对象
-    pygame.init()   # 初始化背景设置
-    screen = pygame.display.set_mode((1200,800))  # 创建显示窗口，（1200，800）指定了窗口的大小
+    pygame.init()
+    ai_setting = Settings()
+    screen = pygame.display.set_mode((ai_setting.screen_width, ai_setting.screen_height))
     pygame.display.set_caption('Alien Invasion')
 
-    # 设置背景色
-    bg_color = (230,230,230)
+    ship = Ship(screen)  #创建一艘飞船
 
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
-        for event in pygame.event.get():   # 所有的键盘和鼠标事件都将促使for循环运行
+        for event in pygame.event.get():  # 所有的键盘和鼠标事件都将促使for循环运行
             if event.type == pygame.QUIT:
                 sys.exit()
 
         # 每次循环时都重新绘制屏幕
-        screen.fill(bg_color)
+        screen.fill(ai_setting.bg_color)
+        ship.bltime()
 
         # 让最近绘制的屏幕可见
         pygame.display.flip()
