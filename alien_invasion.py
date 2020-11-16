@@ -34,6 +34,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+import game_functions as gf
 
 def run_game():
     pygame.init()
@@ -46,15 +47,9 @@ def run_game():
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
-        for event in pygame.event.get():  # 所有的键盘和鼠标事件都将促使for循环运行
-            if event.type == pygame.QUIT:
-                sys.exit()
+        gf.check_events()
 
         # 每次循环时都重新绘制屏幕
-        screen.fill(ai_setting.bg_color)
-        ship.bltime()
-
-        # 让最近绘制的屏幕可见
-        pygame.display.flip()
+        gf.update_screen(ai_setting, screen, ship)
 
 run_game()
