@@ -42,13 +42,13 @@ def run_game():
     screen = pygame.display.set_mode((ai_setting.screen_width, ai_setting.screen_height))
     pygame.display.set_caption('Alien Invasion')
 
-    ship = Ship(screen)  #创建一艘飞船
+    ship = Ship(ai_setting, screen)  #创建一艘飞船
 
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
-        gf.check_events()
-
+        gf.check_events(ship)
+        ship.update()
         # 每次循环时都重新绘制屏幕
         gf.update_screen(ai_setting, screen, ship)
 
