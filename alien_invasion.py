@@ -36,23 +36,33 @@ from settings import Settings
 from ship import Ship
 import game_functions as gf
 from pygame.sprite import Group
+from game_stats import GameStats
+from alien import Alien
 
 def run_game():
     pygame.init()
-    ai_setting = Settings()
-    screen = pygame.display.set_mode((ai_setting.screen_width, ai_setting.screen_height))
+    ai_settings = Settings()
+    screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption('Alien Invasion')
 
-    ship = Ship(ai_setting, screen)  #创建一艘飞船
-    bullets = Group()
+    ship = Ship(ai_settings, screen)  #创建一艘飞船
+    bullets = Group()   # 子弹编组
+    aliens = Group()  # 创建外星人编组
+    stats = GameStats(ai_settings)  # 创建一个用于统计游戏信息的类
+    # 创建外星人群
+    gf.create_fleet(ai_settings, screen, aliens, ship)
 
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
-        gf.check_events(ai_setting, screen, ship, bullets)
-        ship.update()
-        gf.update_bullets(bullets)
-        # 每次循环时都重新绘制屏幕
-        gf.update_screen(ai_setting, screen, ship, bullets)
+        gf.check_events(ai_settings, screen, ship, bullets)
+
+        if stats.game_active:  # 如果游戏处于活动状态
+            ship.update()
+            gf.update_bullets(bullets, ai_settings, screen, aliens, ship)
+            gf.update_aliens(ai_settings, screen, ship, bullets, aliens, stats)
+            # 每次循环时都重新绘制屏幕
+
+        gf.update_screen(ai_settings, screen, ship, bullets, aliens)
 
 run_game()
