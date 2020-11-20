@@ -37,6 +37,8 @@ from ship import Ship
 import game_functions as gf
 from pygame.sprite import Group
 from game_stats import GameStats
+from button import Button
+from scoreboard import Scoreboard
 from alien import Alien
 
 def run_game():
@@ -45,24 +47,26 @@ def run_game():
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption('Alien Invasion')
 
+    play_button = Button(ai_settings, screen, 'Play')  # 创建Play按钮
     ship = Ship(ai_settings, screen)  #创建一艘飞船
     bullets = Group()   # 子弹编组
     aliens = Group()  # 创建外星人编组
     stats = GameStats(ai_settings)  # 创建一个用于统计游戏信息的类
+    sb = Scoreboard(ai_settings, screen , stats)  # 创建计分牌
     # 创建外星人群
     gf.create_fleet(ai_settings, screen, aliens, ship)
 
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
-        gf.check_events(ai_settings, screen, ship, bullets)
+        gf.check_events(ai_settings, screen, aliens, ship, stats, play_button, bullets, sb)
 
         if stats.game_active:  # 如果游戏处于活动状态
             ship.update()
-            gf.update_bullets(bullets, ai_settings, screen, aliens, ship)
-            gf.update_aliens(ai_settings, screen, ship, bullets, aliens, stats)
+            gf.update_bullets(ai_settings, aliens, bullets, stats, sb)
+            gf.update_aliens(ai_settings, screen, ship, bullets, aliens, stats, sb)
             # 每次循环时都重新绘制屏幕
 
-        gf.update_screen(ai_settings, screen, ship, bullets, aliens)
+        gf.update_screen(ai_settings, screen, ship, bullets, aliens, stats, play_button, sb)
 
 run_game()
